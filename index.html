@@ -10,36 +10,6 @@
     <script src="js/galaxy.js"></script>
     <script src="js/jquery-3.3.1/jquery-3.3.1.js"></script>
 
-    <style type="text/css">
-        .planet {
-            width: 50px;
-            height: 50px;
-            -moz-border-radius: 25px;
-            -webkit-border-radius: 25px;
-            border-radius: 25px;
-            position: absolute;
-        }
-
-        *{
-            margin: 0;
-            padding: 0;
-        }
-
-        #gameRound{
-
-
-        }
-        #yourPlanet{
-            width: 50px;
-            height: 50px;
-            -moz-border-radius: 25px;
-            -webkit-border-radius: 25px;
-            border-radius: 25px;
-            position: absolute;
-            background-color: red;
-        }
-    </style>
-
 </head>
 
 <body>
@@ -51,10 +21,12 @@
         <!--浏览器窗口 的 实际宽度: <input type="text" id="width" size="4"><br>-->
     <!--</form>-->
 
-    <input type="button" id="start" value="start" >
-    Vx: <input type="text" id="Xspeed" value="10"> Vy: <input type="text" id="Yspeed" value="10">
+    <!--<input type="button" id="start" value="start" >-->
+    <!--Vx: <input type="text" id="Xspeed" value="10"> Vy: <input type="text" id="Yspeed" value="10">-->
+
     <!--&lt;!&ndash;鼠标X轴:<input id=xxx type=text>鼠标Y轴:<input id=yyy type=text>&ndash;&gt;-->
     <!--&lt;!&ndash;<input type="button" id="stop" value="stop">&ndash;&gt;-->
+
     <div id="gameRound">
        <div id="yourPlanet">
            <p style="text-align: center;margin: 12px">me</p>
@@ -63,165 +35,10 @@
 </body>
 
 <script type="text/javascript">
-
     var radiusofPlanet = 25;
     var G;//万有引力常量
     var planets = new Array();//行星数组
     var planetNum = 0;//现有的行星数量
-
-    function planet(id,vx,vy,px,py,color) {
-        this.id = id;//每个id 对应一个div
-        this.Vx = vx;
-        this.Vy = vy;
-        this.posx = px;
-        this.posy = py;
-        this.color = color;
-    }
-
-    function createDivbyPlanet(myplanet) {
-        cdiv = document.createElement('DIV');
-        document.body.appendChild(cdiv);
-        cdiv.className = 'mdiv';
-        cdiv.id = myplanet.id;
-        cdiv.style.top = myplanet.posy+'px';
-        cdiv.style.left = myplanet.posx+'px';
-        cdiv.style.backgroundColor = myplanet.color;
-    }
-
-    function startMove(myplanet){
-
-        mydiv = document.getElementById(myplanet.id);
-        if (mydiv.offsetTop + mydiv.clientHeight + 10> document.documentElement.clientHeight) {
-            myplanet.Vx = -Math.abs(myplanet.Vx);
-        }
-        if(mydiv.offsetTop < 10){
-            myplanet.Vx = Math.abs(myplanet.Vx);
-        }
-        if (mydiv.offsetLeft + mydiv.clientWidth +10 > document.documentElement.clientWidth) {
-            myplanet.Vy = -Math.abs(myplanet.Vy);
-        }
-        if(mydiv.offsetLeft < 10){
-            myplanet.Vy = Math.abs(myplanet.Vy);
-        }
-        mydiv.style.top = mydiv.offsetTop + myplanet.Vx + 'px';
-        mydiv.style.left = mydiv.offsetLeft + myplanet.Vy + 'px';
-    }
-
-    //随机颜色的方法，从别处复制来的。
-    function getRandomColor(){
-
-        return  '#' +
-            (function(color){
-                return (color +=  '0123456789abcdef'[Math.floor(Math.random()*16)])
-                && (color.length == 6) ?  color : arguments.callee(color);
-            })('');
-    }
-
-    //获取鼠标位置，赋值
-    function mousePosition(ev) {
-        // Ev = ev || window.event;
-        var mousePos = mouseCoords(ev);
-        //将鼠标位置发送到全局变量
-        mousePosX = mousePos.x;
-        mousePosY = mousePos.y;
-        // document.getElementById("xxx").value = mousePos.x;
-        // document.getElementById("yyy").value = mousePos.y;
-
-
-    }
-    function mouseCoords(ev) {
-        if (ev.pageX || ev.pageY) {
-            return {x: ev.pageX, y: ev.pageY};
-        }
-        return {
-            x: ev.clientX + document.body.scrollLeft - document.body.clientLeft,
-            y: ev.clientY + document.body.scrollTop - document.body.clientTop
-        };
-    }
-
-
-
-    //每当浏览器大小改变时，获取浏览器大小
-    function findDimensions()
-    {
-        clientW = window.innerWidth
-            || document.documentElement.clientWidth
-            || document.body.clientWidth;
-
-        clientH = window.innerHeight
-            || document.documentElement.clientHeighta
-            || document.body.clientHeight;
-        //结果输出至两个文本框
-        // document.getElementById("height").value= clientH;
-        // document.getElementById("width").value= clientW;
-    }
-
-    function myplanetControl(event) {
-        var e = event || window.event;
-        var myplanet = document.getElementById("yourPlanet");
-        var moveDistance = 15;
-
-        //为了解决连续移动不卡顿问题
-        ////创建各个方向条件判断初始变量
-        var left = false;
-        var right = false;
-        var top = false;
-        var bottom = false;
-        // keyCode 37 = Left
-        // keyCode 38 = Up
-        // keyCode 39 = Right
-        // keyCode 40 = Down
-        // keyCode 87 = w W
-        // keyCode 65 = a A
-        // keyCode 83 = s S
-        // keyCode 68 = d D
-
-        if(e){
-            switch (e.keyCode) {
-                case 65:
-                    myplanet.style.left = myplanet.offsetLeft - moveDistance + 'px';
-                    break;
-                case 87:
-                    myplanet.style.top = myplanet.offsetTop - moveDistance + 'px';
-                    break;
-                case 68:
-                    myplanet.style.left = myplanet.offsetLeft + moveDistance + 'px';
-                    break;
-                case 83:
-                    myplanet.style.top = myplanet.offsetTop + moveDistance + 'px';
-                    break;
-            }
-        }
-    }
-
-    //类似工厂模式创建星球
-    function createPlanet() {
-        var vx = document.getElementById("Xspeed").value;
-        var vy = document.getElementById("Yspeed").value;
-
-        var posx = mousePosX - radiusofPlanet;
-        var posy = mousePosY - radiusofPlanet;
-
-        var color = getRandomColor();
-        var id = "c"+planetNum;
-
-        var myplanet = new planet(id,vx,vy,posx,posy,color);
-        createDivbyPlanet(myplanet);
-    }
-
-    $("#start").click(function() {
-        if(!isStart){
-            isStart = true;
-            timer=self.setInterval(function () {
-                startMove(p1);
-                startMove(p2);
-                // createPlanet()
-            },5);
-        }else{
-            isStart = false;
-            clearInterval(timer);
-        }
-    });
 
     //获取浏览器大小
     var clientW = 0;
@@ -232,6 +49,7 @@
     //初始化鼠标位置值
     var mousePosX = 0;
     var mousePosY = 0;
+
     // document.onmousedown = function () {
     //     mousePosition(event)
     //     createPlanet();
@@ -295,45 +113,6 @@
             yourPlanet.style.top = yourPlanet.offsetTop+moveDistance+"px";
         }
     },50);
-    // keyCode 37 = Left
-    // keyCode 38 = Up
-    // keyCode 39 = Right
-    // keyCode 40 = Down
-    // keyCode 87 = w W
-    // keyCode 65 = a A
-    // keyCode 83 = s S
-    // keyCode 68 = d D
-
-
-
-
-
-
-    // var p1 = new planet('c1',2,3,200,300,"red");
-    // var p2 = new planet('c2',3,2,500,200,"green");
-    // createDivbyPlanet(p1);
-    // createDivbyPlanet(p2);
-    // var p3 = createPlanet();
-    // var px = new createPlanet(xxxxxxxxxx); get_mouse_pos();
-
-
-
-    //
-    //
-    // function getMousePos(event) {
-    //     var e = event || window.event;
-    //     console.log(e.screenY,e.screenX);
-    //
-    //     return{
-    //         'x':e.screenX,
-    //         'y':e.screenY
-    //     }
-    // }
-    // document.onmousemove =
-    // getMousePos = document.onmousedown;
-
-
-
 
 </script>
 </html>
