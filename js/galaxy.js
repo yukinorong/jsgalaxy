@@ -79,7 +79,7 @@ function findDimensions()
         || document.body.clientWidth;
 
     clientH = window.innerHeight
-        || document.documentElement.clientHeighta
+        || document.documentElement.clientHeight
         || document.body.clientHeight;
     //结果输出至两个文本框
     // document.getElementById("height").value= clientH;

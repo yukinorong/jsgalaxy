@@ -21,11 +21,11 @@
         <!--浏览器窗口 的 实际宽度: <input type="text" id="width" size="4"><br>-->
     <!--</form>-->
 
-    <!--<input type="button" id="start" value="start" >-->
-    <!--Vx: <input type="text" id="Xspeed" value="10"> Vy: <input type="text" id="Yspeed" value="10">-->
+    <input type="button" id="start" value="start" >
+    Vx: <input type="text" id="Xspeed" value="10"> Vy: <input type="text" id="Yspeed" value="10">
 
-    <!--&lt;!&ndash;鼠标X轴:<input id=xxx type=text>鼠标Y轴:<input id=yyy type=text>&ndash;&gt;-->
-    <!--&lt;!&ndash;<input type="button" id="stop" value="stop">&ndash;&gt;-->
+    <!--鼠标X轴:<input id=xxx type=text>鼠标Y轴:<input id=yyy type=text>-->
+    <!--<input type="button" id="stop" value="stop">-->
 
     <div id="gameRound">
        <div id="yourPlanet">
@@ -50,10 +50,11 @@
     var mousePosX = 0;
     var mousePosY = 0;
 
-    // document.onmousedown = function () {
-    //     mousePosition(event)
-    //     createPlanet();
-    // }
+    //点击创建星球
+    document.onmousedown = function () {
+        mousePosition(event);
+        createPlanet();
+    };
 
     //主程序
     var timer;//所有星球统一刷新时间
@@ -62,8 +63,10 @@
     var yourPlanet = document.getElementById("yourPlanet");
     yourPlanet.style.top = clientH/2 + 'px';
     yourPlanet.style.left = clientW/2 + 'px';
-    var moveDistance = 15;
+    var moveDistance = 3;
 
+
+    //行星移动代码
     var left = false;
     var right = false;
     var up = false;
@@ -103,16 +106,41 @@
         }
     };
     setInterval(function () {
+        // //判断有几个键被按下，两个键同时按下速度要减少根号二。 （失败）
+        // var num,a,b,c,d = 0;
+        // var mymoveDistance = 0;
+        // if(left){
+        //     a=1;
+        // }
+        // if(up){
+        //     b=1;
+        // }
+        // if(right){
+        //     c=1;
+        // }
+        // if(down){
+        //     d=1;
+        // }
+        // num = a + b + c + d;
+        // if(num === 2){
+        //     mymoveDistance = moveDistance / 1.414;
+        // }else {
+        //     mymoveDistance = moveDistance;
+        // }
+
         if(left){
             yourPlanet.style.left = yourPlanet.offsetLeft-moveDistance+"px";
-        }else if(up){
+        }
+        if(up){
             yourPlanet.style.top = yourPlanet.offsetTop-moveDistance+"px";
-        }else if(right){
+        }
+        if(right){
             yourPlanet.style.left = yourPlanet.offsetLeft+moveDistance+"px";
-        }else if(down){
+        }
+        if(down){
             yourPlanet.style.top = yourPlanet.offsetTop+moveDistance+"px";
         }
-    },50);
+    },10);
 
 </script>
 </html>
