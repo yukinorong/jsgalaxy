@@ -11,11 +11,14 @@
 
 </head>
 <body>
-
+    x = <div id="x"></div>
+    y = <div id="y"></div>
 </body>
 <script type="text/javascript">
     //万有引力常数
     var g = 10;
+
+    var starArray = new Array();
 
     function star(id,vx,vy,px,py,m,color) {
         this.id = id;//每个id 对应一个div
@@ -32,9 +35,26 @@
         stardiv.style.left = px + 'px';
         stardiv.id = id;
         stardiv.style.backgroundColor = color;
+
     }
-    var astar = star('a',0,0,500,300,1,"red");
-    var bstar = star('b',0,0,100,500,1,"blue");
+    star('a',0,0,500,300,1,"red");
+    star('b',0,0,100,500,1,"blue");
+
+    var a_star = $('div#a');
+    var b_star = $('div#b');
+
+    starArray.push(a_star);
+    starArray.push(b_star);
+
+    function g(a,b) {
+        var px = b.px - a.px;
+        var py = b.py - a.py;
+        var p = Math.sqrt(px * px + py * py);
+        var f = g * a.m * b.m / (p * p);
+        return {fx:f*px/p ,
+                fy:f*py/p }
+    }
+
 
     
 </script>

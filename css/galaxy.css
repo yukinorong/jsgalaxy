@@ -11,6 +11,10 @@
     border-radius: 25px;
     position: absolute;
 }
+.planettext{
+    text-align: center;
+    margin: 12px;
+}
 
 .doublestar{
     width: 25px;

@@ -7,7 +7,7 @@
     <title>galaxy</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/galaxy.css">
-    <script src="js/galaxy.js"></script>
+    <!--<script src="js/galaxy.js"></script>-->
     <script src="js/jquery-3.3.1/jquery-3.3.1.js"></script>
 
 </head>
@@ -22,39 +22,42 @@
     <!--</form>-->
 
     <input type="button" id="start" value="start" >
-    Vx: <input type="text" id="Xspeed" value="10"> Vy: <input type="text" id="Yspeed" value="10">
+    <!--Vx: <input type="text" id="Xspeed" value="10"> Vy: <input type="text" id="Yspeed" value="10">-->
+    fx: <input type="text" id="fx" value="10"> fy: <input type="text" id="fy" value="10">
 
     <!--鼠标X轴:<input id=xxx type=text>鼠标Y轴:<input id=yyy type=text>-->
     <!--<input type="button" id="stop" value="stop">-->
-
+    <div id="blackHole" class="planet" style="background-color: black;top: 200px;left:200px">
+        <div class="planettext">bh</div>
+    </div>
     <div id="gameRound">
        <div id="yourPlanet">
-           <p style="text-align: center;margin: 12px">me</p>
+           <div class="planettext">me</div>
        </div>
     </div>
 </body>
 
 <script type="text/javascript">
     var radiusofPlanet = 25;
-    var G;//万有引力常量
+    var G = 100000;//万有引力常量
     var planets = new Array();//行星数组
     var planetNum = 0;//现有的行星数量
 
     //获取浏览器大小
     var clientW = 0;
     var clientH = 0;
-    findDimensions();
-    window.onresize=findDimensions;
+    // findDimensions();
+    // window.onresize=findDimensions;
 
     //初始化鼠标位置值
     var mousePosX = 0;
     var mousePosY = 0;
 
     //点击创建星球
-    document.onmousedown = function () {
-        mousePosition(event);
-        createPlanet();
-    };
+    // document.onmousedown = function () {
+    //     mousePosition(event);
+    //     createPlanet();
+    // };
 
     //主程序
     var timer;//所有星球统一刷新时间
@@ -65,6 +68,7 @@
     yourPlanet.style.left = clientW/2 + 'px';
     var moveDistance = 3;
 
+    var blackHole = document.getElementById("blackHole");
 
     //行星移动代码
     var left = false;
@@ -140,7 +144,24 @@
         if(down){
             yourPlanet.style.top = yourPlanet.offsetTop+moveDistance+"px";
         }
+        gravitation();
+        yourPlanet.style.top = yourPlanet.offsetTop - document.getElementById('fy').value +'px';
+        yourPlanet.style.left = yourPlanet.offsetLeft - document.getElementById('fx').value +'px';
     },10);
 
+    function gravitation() {
+        var bh = document.getElementById('blackHole');
+        var yp = document.getElementById('yourPlanet');
+        var px = bh.offsetLeft - yp.offsetLeft;
+        var py = bh.offsetTop - yp.offsetTop;
+        var p = Math.sqrt(px * px + py * py);
+        var f = G / (p * p);
+        if(f>moveDistance){
+            f = moveDistance/2;
+        }
+        document.getElementById('fx').value = f*px/p;
+        document.getElementById('fy').value = f*py/p;
+
+    }
 </script>
 </html>
