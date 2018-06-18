@@ -8,20 +8,58 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/galaxy.css">
     <script src="js/jquery-3.3.1/jquery-3.3.1.js"></script>
-
+    <style>
+        .star{
+            width: 50px;
+            height: 50px;
+            -moz-border-radius: 25px;
+            -webkit-border-radius: 25px;
+            border-radius: 25px;
+            position: absolute;
+        }
+        .bullet{
+            width: 20px;
+            height: 20px;
+            -moz-border-radius: 25px;
+            -webkit-border-radius: 25px;
+            border-radius: 25px;
+            position: absolute;
+        }
+    </style>
 </head>
 <body>
-    x = <div id="x"></div>
-    y = <div id="y"></div>
+    <!--x = <div id="x"></div>-->
+    <!--y = <div id="y"></div>-->
 </body>
 <script type="text/javascript">
-    //万有引力常数
-    var g = 10;
+
+    var g = 10; //万有引力常数
+
+    // var a_star = document.getElementById('a');
+    // var b_star = $('#b');
 
     var starArray = new Array();
+    var bulletArray = new Array();
 
-    function star(id,vx,vy,px,py,m,color) {
-        this.id = id;//每个id 对应一个div
+    // star('a',0,0,500,300,1,"red");
+    var s = new star(10,0,100,500,1,"blue");
+
+    starArray.push(s);
+
+
+    setInterval(function () {
+        // alert(starArray[0].div.offsetTop)
+        if(starArray[0].div.offsetTop > 800){
+            starArray[0].vy = -starArray[0].vy ;
+        }
+        starArray[0].vy+=g/100;
+        starArray[0].div.style.top = starArray[0].div.offsetTop + starArray[0].vy + 'px';
+        // starArray[0].div.style.left = starArray[0].div.offsetLeft + starArray[0].vy + 'px';
+
+    },10);
+
+    function star(vx,vy,px,py,m,color) {
+
         this.vx = vx;
         this.vy = vy;
         this.px = px;
@@ -29,22 +67,25 @@
         this.color = color;
         this.m = m;
         var stardiv = document.createElement("div");
+        this.div = stardiv;
         document.body.appendChild(stardiv);
         stardiv.className = 'doublestar';
         stardiv.style.top = py + 'px';
         stardiv.style.left = px + 'px';
-        stardiv.id = id;
         stardiv.style.backgroundColor = color;
 
     }
-    star('a',0,0,500,300,1,"red");
-    star('b',0,0,100,500,1,"blue");
 
-    var a_star = $('div#a');
-    var b_star = $('div#b');
-
-    starArray.push(a_star);
-    starArray.push(b_star);
+    function shoot(px,py,color) {
+        this.px = px;
+        this.py = py;
+        this.color = color;
+        var bdiv = document.createElement("div");
+        this.div = bdiv;
+        document.body.appendChild(bdiv);
+        bdiv.addClass(bullet);
+        bulletArray.push(bdiv);
+    }
 
     function g(a,b) {
         var px = b.px - a.px;
@@ -55,6 +96,11 @@
                 fy:f*py/p }
     }
 
+    $('body').mousedown(function (e) {
+        var b = $('#b');
+        var bshoot = shoot(b.offsetLeft,b.offsetTop,'red');
+        bshoot.div
+    })
 
     
 </script>

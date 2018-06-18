@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/galaxy.css">
     <!--<script src="js/galaxy.js"></script>-->
-    <script src="js/jquery-3.3.1/jquery-3.3.1.js"></script>
+
 
 </head>
 
@@ -23,7 +23,7 @@
 
     <input type="button" id="start" value="start" >
     <!--Vx: <input type="text" id="Xspeed" value="10"> Vy: <input type="text" id="Yspeed" value="10">-->
-    fx: <input type="text" id="fx" value="10"> fy: <input type="text" id="fy" value="10">
+    fx: <input type="text" id="fx" value="10"> fy: <input type="text" id="fy" value="10"> p: <input type="text" id="p" value="10">
 
     <!--鼠标X轴:<input id=xxx type=text>鼠标Y轴:<input id=yyy type=text>-->
     <!--<input type="button" id="stop" value="stop">-->
@@ -36,7 +36,7 @@
        </div>
     </div>
 </body>
-
+<script src="js/jquery-3.3.1/jquery-3.3.1.js"></script>
 <script type="text/javascript">
     var radiusofPlanet = 25;
     var G = 100000;//万有引力常量
@@ -64,8 +64,7 @@
     var isStart = false;//时间控制器
 
     var yourPlanet = document.getElementById("yourPlanet");
-    yourPlanet.style.top = clientH/2 + 'px';
-    yourPlanet.style.left = clientW/2 + 'px';
+
     var moveDistance = 3;
 
     var blackHole = document.getElementById("blackHole");
@@ -110,38 +109,32 @@
         }
     };
     setInterval(function () {
-        // //判断有几个键被按下，两个键同时按下速度要减少根号二。 （失败）
-        // var num,a,b,c,d = 0;
-        // var mymoveDistance = 0;
-        // if(left){
-        //     a=1;
-        // }
-        // if(up){
-        //     b=1;
-        // }
-        // if(right){
-        //     c=1;
-        // }
-        // if(down){
-        //     d=1;
-        // }
-        // num = a + b + c + d;
-        // if(num === 2){
-        //     mymoveDistance = moveDistance / 1.414;
-        // }else {
-        //     mymoveDistance = moveDistance;
-        // }
-
-        if(left){
+        if(left & up){
+            yourPlanet.style.left = yourPlanet.offsetLeft-0.7*moveDistance+"px";
+            yourPlanet.style.top = yourPlanet.offsetTop-0.7*moveDistance+"px";
+        }
+        else if(left & down){
+            yourPlanet.style.left = yourPlanet.offsetLeft-0.7*moveDistance+"px";
+            yourPlanet.style.top = yourPlanet.offsetTop+0.7*moveDistance+"px";
+        }
+        else if(right & up){
+            yourPlanet.style.left = yourPlanet.offsetLeft+0.7*moveDistance+"px";
+            yourPlanet.style.top = yourPlanet.offsetTop-0.7*moveDistance+"px";
+        }
+        else if(right & down){
+            yourPlanet.style.left = yourPlanet.offsetLeft+0.7*moveDistance+"px";
+            yourPlanet.style.top = yourPlanet.offsetTop+0.7*moveDistance+"px";
+        }
+        else if(left){
             yourPlanet.style.left = yourPlanet.offsetLeft-moveDistance+"px";
         }
-        if(up){
+        else if(up){
             yourPlanet.style.top = yourPlanet.offsetTop-moveDistance+"px";
         }
-        if(right){
+        else if(right){
             yourPlanet.style.left = yourPlanet.offsetLeft+moveDistance+"px";
         }
-        if(down){
+        else if(down){
             yourPlanet.style.top = yourPlanet.offsetTop+moveDistance+"px";
         }
         gravitation();
@@ -155,12 +148,13 @@
         var px = bh.offsetLeft - yp.offsetLeft;
         var py = bh.offsetTop - yp.offsetTop;
         var p = Math.sqrt(px * px + py * py);
-        var f = G / (p * p);
-        if(f>moveDistance){
-            f = moveDistance/2;
-        }
+        var f = G*10 / (p * p);
+        // if(f > moveDistance){
+        //     f = moveDistance/2;
+        // }
         document.getElementById('fx').value = f*px/p;
         document.getElementById('fy').value = f*py/p;
+        $('#p').val(p);
 
     }
 </script>
